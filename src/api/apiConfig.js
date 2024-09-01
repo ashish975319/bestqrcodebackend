@@ -7,7 +7,12 @@
 
 // src/api/apiConfig.js
 
+// export const API_URLS = {
+//   GENERATE_QR_CODE: "bestqrcodebackendspringboot.railway.internal/api/generate",
+//   SCAN_DATA: "bestqrcodebackendspringboot.railway.internal/api/scanned-data",
+// };
+
 export const API_URLS = {
-  GENERATE_QR_CODE: "bestqrcodebackendspringboot.railway.internal/api/generate",
-  SCAN_DATA: "bestqrcodebackendspringboot.railway.internal/api/scanned-data",
+  GENERATE_QR_CODE: "https://zoological-blessing.up.railway.app/api/generate",
+  SCAN_DATA: "https://zoological-blessing.up.railway.app/api/scanned-data",
 };
