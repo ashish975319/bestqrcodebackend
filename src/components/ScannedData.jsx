@@ -90,7 +90,7 @@ END:VCARD
               <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table className="w-full text-left text-gray-500 dark:text-gray-400">
                   <caption className="caption-bottom text-xl md:text-2xl font-semibold text-gray-700 mb-4">
-                    Scanned Data Details
+                    {/* Scanned Data Details */}
                   </caption>
                   <tbody>
                     <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">

@@ -1,105 +1,12 @@
-// import React from "react";
-// import { useLocation } from "react-router-dom";
-// import QRCode from "react-qr-code";
-
-// const QRCodePage = () => {
-//   const location = useLocation();
-//   const { state } = location;
-//   const { qrCodeUrl, color } = state || {};
-
-//   return (
-//     <div className="min-h-screen flex flex-col items-center justify-center p-6">
-//       <h1 className="text-2xl font-bold mb-4">Generated QR Code</h1>
-//       <div className="bg-white p-4 rounded-lg shadow-lg">
-//         {qrCodeUrl ? (
-//           <div className="text-center">
-//             {/* QRCode component to render the QR code */}
-//             <QRCode
-//               value={qrCodeUrl}
-//               size={200} // Adjust size as needed
-//               fgColor={color} // Foreground color of QR code
-//               style={{ width: "150px", height: "150px" }} // Optional styling
-//             />
-//           </div>
-//         ) : (
-//           <p>No QR Code data available.</p>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default QRCodePage;
-
-// import React, { useRef } from "react";
-// import { useLocation } from "react-router-dom";
-// import QRCode from "react-qr-code";
-// import { FaDownload } from "react-icons/fa";
-// import { toSvg } from "html-to-image";
-
-// const QRCodePage = () => {
-//   const location = useLocation();
-//   const { state } = location;
-//   const { qrCodeUrl, color } = state || {};
-
-//   // Reference for the QR code container
-//   const qrRef = useRef();
-
-//   // Function to handle the download of the SVG
-//   const handleDownloadSVG = async () => {
-//     if (qrRef.current) {
-//       const svgDataUrl = await toSvg(qrRef.current);
-//       const link = document.createElement("a");
-//       link.href = svgDataUrl;
-//       link.download = "qr-code.svg";
-//       document.body.appendChild(link);
-//       link.click();
-//       document.body.removeChild(link);
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen flex flex-col items-center justify-center p-6">
-//       <h1 className="text-2xl font-bold mb-4">Generated QR Code</h1>
-//       <div className="bg-white p-4 rounded-lg shadow-lg text-center">
-//         {qrCodeUrl ? (
-//           <div ref={qrRef} className="inline-block">
-//             {/* QRCode component to render the QR code */}
-//             <QRCode
-//               value={qrCodeUrl}
-//               size={200} // Adjust size as needed
-//               fgColor={color} // Foreground color of QR code
-//               style={{ width: "150px", height: "150px" }} // Optional styling
-//             />
-//           </div>
-//         ) : (
-//           <p>No QR Code data available.</p>
-//         )}
-//       </div>
-//       <button
-//         onClick={handleDownloadSVG}
-//         className="mt-1 bg-blue-600 text-white py-1 px-4 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
-//       >
-//         <FaDownload /> Download
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default QRCodePage;
-
 import React, { useRef } from "react";
-
 import { useLocation, useNavigate } from "react-router-dom";
-
 import QRCode from "react-qr-code";
-import { FaDownload, FaQrcode } from "react-icons/fa";
+import { FaDownload, FaQrcode, FaShareSquare } from "react-icons/fa";
 
 const QRCodePage = () => {
   const location = useLocation();
-  const { state } = location;
   const navigate = useNavigate(); // Import and use the navigate function
-
+  const { state } = location;
   const { qrCodeUrl, color } = state || {};
 
   const svgRef = useRef(null);
@@ -122,9 +29,12 @@ const QRCodePage = () => {
     }
   };
 
-  const handleScan = () => {
-    // Logic for scanning the QR code can be added here
-    alert("Scan functionality to be implemented!");
+  const handleShareWhatsApp = () => {
+    if (qrCodeUrl) {
+      const message = `Check out this QR Code: ${qrCodeUrl}`;
+      const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      window.open(url, "_blank");
+    }
   };
 
   return (
@@ -171,6 +81,13 @@ const QRCodePage = () => {
         >
           <FaQrcode className="mr-2" />
           Scan QR Code
+        </button>
+        <button
+          className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 flex items-center"
+          onClick={handleShareWhatsApp}
+        >
+          <FaShareSquare className="mr-2" />
+          Share on WhatsApp
         </button>
       </div>
     </div>
