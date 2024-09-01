@@ -13,6 +13,8 @@
 // };
 
 export const API_URLS = {
-  GENERATE_QR_CODE: "https://zoological-blessing.up.railway.app/api/generate",
-  SCAN_DATA: "https://zoological-blessing.up.railway.app/api/scanned-data",
+  GENERATE_QR_CODE:
+    "https://bestqrcodebackendspringboot-production.up.railway.app/api/generate",
+  SCAN_DATA:
+    "https://bestqrcodebackendspringboot-production.up.railway.app/api/scanned-data",
 };
