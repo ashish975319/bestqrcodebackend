@@ -218,7 +218,7 @@ END:VCARD
         ) : (
           <p className="text-lg text-gray-600">Loading...</p>
         )}
-        <div className="mt-6 flex justify-between">
+        <div className="mt-6 flex justify-between gap-4">
           <button
             onClick={handleDownload}
             className="bg-blue-600 text-white py-1 px-2 rounded-lg flex items-center gap-5 hover:bg-blue-700 transition"

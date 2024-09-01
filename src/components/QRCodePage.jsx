@@ -82,13 +82,13 @@ const QRCodePage = () => {
           <FaQrcode className="mr-2" />
           Scan QR Code
         </button>
-        <button
+        {/* <button
           className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 flex items-center"
           onClick={handleShareWhatsApp}
         >
           <FaShareSquare className="mr-2" />
           Share on WhatsApp
-        </button>
+        </button> */}
       </div>
     </div>
   );
