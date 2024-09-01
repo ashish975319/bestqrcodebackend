@@ -105,6 +105,7 @@ END:VCARD
                         {data.name || "N/A"}
                       </td>
                     </tr>
+
                     <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                       <th
                         scope="row"
@@ -117,6 +118,7 @@ END:VCARD
                         {data.landline || "N/A"}
                       </td>
                     </tr>
+
                     <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
                       <th
                         scope="row"
@@ -125,14 +127,17 @@ END:VCARD
                         <FaMobileAlt className="text-blue-500" />
                         <span className="ml-2">Mobile:</span>
                       </th>
-                      <td className="px-4 py-2 md:px-6 md:py-4 flex items-center gap-2">
+                      <td className="px-4 py-2 md:px-6 md:py-4 ">
                         {data.mobile || "N/A"}
-                        <FaSave
-                          className="text-green-500 cursor-pointer"
-                          onClick={handleSaveContact}
-                        />
+                        <td className="flex">
+                          <FaSave
+                            className="text-green-500  cursor-pointer "
+                            onClick={handleSaveContact}
+                          />
+                        </td>
                       </td>
                     </tr>
+
                     <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                       <th
                         scope="row"
@@ -216,13 +221,13 @@ END:VCARD
         <div className="mt-6 flex justify-between">
           <button
             onClick={handleDownload}
-            className="bg-blue-600 text-white py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
+            className="bg-blue-600 text-white py-1 px-2 rounded-lg flex items-center gap-5 hover:bg-blue-700 transition"
           >
             <FaDownload /> Download Data
           </button>
           <button
             onClick={() => navigate("/")}
-            className="bg-green-600 text-white py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-green-700 transition"
+            className="bg-green-600 text-white py-1 px-2 rounded-lg flex items-center gap-2 hover:bg-green-700 transition"
           >
             <FaArrowLeft /> Back to QR Code Generator
           </button>
