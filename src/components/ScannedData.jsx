@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Footer from "../footer/Footer";
 import {
   FaDownload,
   FaArrowLeft,
@@ -77,12 +78,19 @@ END:VCARD
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 p-4 md:p-6 lg:p-8">
-      <div className="bg-white p-4 md:p-6 lg:p-8 rounded-lg shadow-lg max-w-4xl w-full">
-        <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-gray-800 flex items-center gap-2">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 p-1 md:p-6 lg:p-8">
+      <div className="bg-white p-0 md:p-6 lg:p-8 rounded-lg shadow-lg max-w-4xl w-full">
+        {/* <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-gray-800 flex items-center gap-2">
           <FaInfoCircle className="text-blue-500 text-xl md:text-2xl" /> Scanned
           Data
-        </h1>
+        </h1> */}
+
+        <div className="mb-6 text-center mt- bg-green-300 p-2">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
+            {data ? data.name : "Loading..."}
+          </h1>
+        </div>
+
         {data ? (
           <div className="flex flex-col md:flex-row gap-6 md:gap-8">
             {/* Data Column */}
@@ -221,16 +229,16 @@ END:VCARD
         <div className="mt-6 flex justify-between gap-4">
           <button
             onClick={handleDownload}
-            className="bg-blue-600 text-white py-1 px-2 rounded-lg flex items-center gap-5 hover:bg-blue-700 transition"
+            className="bg-blue-600 text-white invisible py-1 px-2 rounded-lg flex items-center gap-5 hover:bg-blue-700 transition"
           >
             <FaDownload /> Download Data
           </button>
-          <button
+          {/* <button
             onClick={() => navigate("/")}
             className="bg-green-600 text-white py-1 px-2 rounded-lg flex items-center gap-2 hover:bg-green-700 transition"
           >
             <FaArrowLeft /> Back to QR Code Generator
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

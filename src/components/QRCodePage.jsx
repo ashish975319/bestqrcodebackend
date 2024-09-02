@@ -73,7 +73,7 @@ const QRCodePage = () => {
           onClick={handleDownloadSVG}
         >
           <FaDownload className="mr-2" />
-          Download SVG
+          Download
         </button>
         <button
           className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 flex items-center"
