@@ -85,7 +85,7 @@ END:VCARD
           Data
         </h1> */}
 
-        <div className="mb-6 text-center mt- bg-green-300 p-2">
+        <div className="mb-6 text-center mt- bg-green-300 p-2 rounded-md">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
             {data ? data.name : "Loading..."}
           </h1>
