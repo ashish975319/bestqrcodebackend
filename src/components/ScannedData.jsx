@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import Footer from "../footer/Footer";
 import {
-  FaDownload,
-  FaArrowLeft,
-  FaUser,
-  FaPhone,
-  FaMobileAlt,
+  FaBuilding,
   FaEnvelope,
   FaGlobe,
   FaMapMarkerAlt,
-  FaBuilding,
-  FaBriefcase,
-  FaInfoCircle,
-  FaSave,
+  FaMobileAlt,
+  FaPhone,
+  FaShareAlt,
 } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 import { API_URLS } from "../api/apiConfig";
 
 const ScannedData = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [data, setData] = useState(null);
+  const [activeSection, setActiveSection] = useState("contact");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,202 +37,179 @@ const ScannedData = () => {
     fetchData();
   }, [location.search]);
 
-  const handleDownload = () => {
-    const blob = new Blob([JSON.stringify(data, null, 2)], {
-      type: "application/json",
-    });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "scanned-data.json";
-    link.click();
-    window.URL.revokeObjectURL(url);
-  };
-
   const handleSaveContact = () => {
+    if (!data) return;
+
     const vCard = `
 BEGIN:VCARD
 VERSION:3.0
-FN:${data.name}
-TEL;TYPE=WORK,VOICE:${data.landline}
-TEL;TYPE=CELL:${data.mobile}
-EMAIL:${data.email}
-ORG:${data.company}
-TITLE:${data.designation}
-ADR;TYPE=HOME:;;${data.address}
+FN:${data.name || ""}
+TEL;TYPE=WORK,VOICE:${data.landline || ""}
+TEL;TYPE=CELL:${data.mobile || ""}
+EMAIL:${data.email || ""}
+ORG:${data.company || ""}
+TITLE:${data.designation || ""}
+ADR;TYPE=HOME:;;${data.address || ""}
 END:VCARD
     `;
     const blob = new Blob([vCard], { type: "text/vcard" });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${data.name.replace(/\s+/g, "_")}_contact.vcf`;
+    link.download = `${
+      data.name?.replace(/\s+/g, "_") || "contact"
+    }_contact.vcf`;
     link.click();
     window.URL.revokeObjectURL(url);
   };
 
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 p-1 md:p-6 lg:p-8">
-      <div className="bg-white p-0 md:p-6 lg:p-8 rounded-lg shadow-lg max-w-4xl w-full">
-        {/* <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-gray-800 flex items-center gap-2">
-          <FaInfoCircle className="text-blue-500 text-xl md:text-2xl" /> Scanned
-          Data
-        </h1> */}
+  if (!data) {
+    return <p className="text-center text-gray-700">Loading data...</p>;
+  }
 
-        <div className="mb-6 text-center mt- bg-green-300 p-2 rounded-md">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-            {data ? data.name : "Loading..."}
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      <div className="bg-orange-800 border border-red-900 shadow-lg flex-1 w-full mx-auto p-4">
+        {/* Profile Section */}
+        <div className="bg-orange-900 h-auto p-10 rounded-t-lg text-center border border-white">
+          {data.photo ? (
+            <img
+              src={`data:image/jpeg;base64,${data.photo}`}
+              alt="Profile"
+              className="w-32 h-32 object-cover rounded-full mx-auto"
+            />
+          ) : (
+            <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto flex items-center justify-center text-gray-700">
+              No Photo
+            </div>
+          )}
+          <h1 className="text-2xl md:text-3xl font-bold text-white mt-4">
+            {data.name || "Loading..."}
           </h1>
+          <span className="text-white">{data.designation || "Loading..."}</span>
+          <div>
+            <span className="text-white">{data.company || "Loading..."}</span>
+          </div>
+          {/* Icons Section */}
+          <div className="mt-8 flex justify-center gap-10">
+            <a
+              href={`tel:${data.mobile}`}
+              className="flex items-center justify-center bg-pink-600 text-white rounded-full p-3 hover:bg-pink-700 transition border border-white"
+              title="Call"
+            >
+              <FaPhone size={24} />
+            </a>
+            <a
+              href={`mailto:${data.email}`}
+              className="flex items-center justify-center bg-pink-600 text-white rounded-full p-3 hover:bg-pink-700 transition border border-white"
+              title="Email"
+            >
+              <FaEnvelope size={24} />
+            </a>
+            <button
+              onClick={handleSaveContact}
+              className="flex items-center justify-center bg-pink-600 text-white rounded-full p-3 hover:bg-pink-700 transition border border-white"
+              title="Save Contact"
+            >
+              <FaShareAlt size={24} />
+            </button>
+          </div>
         </div>
 
-        {data ? (
-          <div className="flex flex-col md:flex-row gap-6 md:gap-8">
-            {/* Data Column */}
-            <div className="flex-1">
-              <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table className="w-full text-left text-gray-500 dark:text-gray-400">
-                  <caption className="caption-bottom text-xl md:text-2xl font-semibold text-gray-700 mb-4">
-                    {/* Scanned Data Details */}
-                  </caption>
-                  <tbody>
-                    <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
-                      <th
-                        scope="row"
-                        className="px-4 py-2 md:px-6 md:py-4 font-medium text-gray-900 dark:text-white flex items-center gap-4"
-                      >
-                        <FaUser className="text-blue-500" />
-                        <span className="ml-2">Name:</span>
-                      </th>
-                      <td className="px-4 py-2 md:px-6 md:py-4">
-                        {data.name || "N/A"}
-                      </td>
-                    </tr>
+        {/* Navigation Section */}
+        <div className="mt-8 flex justify-center gap-4 border p-2 rounded-md border-white">
+          <button
+            onClick={() => setActiveSection("contact")}
+            className={`px-4 py-2 rounded-lg ${
+              activeSection === "contact"
+                ? "bg-orange-600 text-white"
+                : "bg-orange-300 text-white"
+            }`}
+          >
+            Contact Details
+          </button>
+          <button
+            onClick={() => setActiveSection("address")}
+            className={`px-4 py-2 rounded-lg ${
+              activeSection === "address"
+                ? "bg-orange-600 text-white"
+                : "bg-orange-300 text-white"
+            }`}
+          >
+            Address
+          </button>
+          <button
+            onClick={() => setActiveSection("social")}
+            className={`px-4 py-2 rounded-lg ${
+              activeSection === "social"
+                ? "bg-orange-600 text-white"
+                : "bg-orange-300 text-white"
+            }`}
+          >
+            Social Media
+          </button>
+        </div>
 
-                    <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                      <th
-                        scope="row"
-                        className="px-4 py-2 md:px-6 md:py-4 font-medium text-gray-900 dark:text-white flex items-center gap-4"
-                      >
-                        <FaPhone className="text-blue-500" />
-                        <span className="ml-2">Landline:</span>
-                      </th>
-                      <td className="px-4 py-2 md:px-6 md:py-4">
-                        {data.landline || "N/A"}
-                      </td>
-                    </tr>
-
-                    <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
-                      <th
-                        scope="row"
-                        className="px-4 py-2 md:px-6 md:py-4 font-medium text-gray-900 dark:text-white flex items-center gap-4"
-                      >
-                        <FaMobileAlt className="text-blue-500" />
-                        <span className="ml-2">Mobile:</span>
-                      </th>
-                      <td className="px-4 py-2 md:px-6 md:py-4 ">
-                        {data.mobile || "N/A"}
-                        <td className="flex">
-                          <FaSave
-                            className="text-green-500  cursor-pointer "
-                            onClick={handleSaveContact}
-                          />
-                        </td>
-                      </td>
-                    </tr>
-
-                    <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                      <th
-                        scope="row"
-                        className="px-4 py-2 md:px-6 md:py-4 font-medium text-gray-900 dark:text-white flex items-center gap-4"
-                      >
-                        <FaEnvelope className="text-blue-500" />
-                        <span className="ml-2">Email:</span>
-                      </th>
-                      <td className="px-4 py-2 md:px-6 md:py-4">
-                        <a
-                          href={`mailto:${data.email}`}
-                          className="text-blue-600 hover:underline"
-                        >
-                          {data.email || "N/A"}
-                        </a>
-                      </td>
-                    </tr>
-                    <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
-                      <th
-                        scope="row"
-                        className="px-4 py-2 md:px-6 md:py-4 font-medium text-gray-900 dark:text-white flex items-center gap-4"
-                      >
-                        <FaGlobe className="text-blue-500" />
-                        <span className="ml-2">Website:</span>
-                      </th>
-                      <td className="px-4 py-2 md:px-6 md:py-4">
-                        <a
-                          href={data.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline"
-                        >
-                          {data.website || "N/A"}
-                        </a>
-                      </td>
-                    </tr>
-                    <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                      <th
-                        scope="row"
-                        className="px-4 py-2 md:px-6 md:py-4 font-medium text-gray-900 dark:text-white flex items-center gap-4"
-                      >
-                        <FaMapMarkerAlt className="text-blue-500" />
-                        <span className="ml-2">Address:</span>
-                      </th>
-                      <td className="px-4 py-2 md:px-6 md:py-4">
-                        {data.address || "N/A"}
-                      </td>
-                    </tr>
-                    <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
-                      <th
-                        scope="row"
-                        className="px-4 py-2 md:px-6 md:py-4 font-medium text-gray-900 dark:text-white flex items-center gap-4"
-                      >
-                        <FaBuilding className="text-blue-500" />
-                        <span className="ml-2">Company:</span>
-                      </th>
-                      <td className="px-4 py-2 md:px-6 md:py-4">
-                        {data.company || "N/A"}
-                      </td>
-                    </tr>
-                    <tr className="bg-white dark:bg-gray-900">
-                      <th
-                        scope="row"
-                        className="px-4 py-2 md:px-6 md:py-4 font-medium text-gray-900 dark:text-white flex items-center gap-4"
-                      >
-                        <FaBriefcase className="text-blue-500" />
-                        <span className="ml-2">Designation:</span>
-                      </th>
-                      <td className="px-4 py-2 md:px-6 md:py-4">
-                        {data.designation || "N/A"}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+        {/* Data Display Section */}
+        <div className="mt-10 border border-white p-4 mb-0">
+          {activeSection === "contact" && (
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-4">
+                <FaMobileAlt className="text-white" size={20} />
+                <span className="text-white">
+                  Mobile: {data.mobile || "N/A"}
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <FaPhone className="text-white" size={20} />
+                <span className="text-white">
+                  Landline: {data.landline || "N/A"}
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <FaEnvelope className="text-white" size={20} />
+                <span className="text-white">Email: {data.email || "N/A"}</span>
               </div>
             </div>
-          </div>
-        ) : (
-          <p className="text-lg text-gray-600">Loading...</p>
-        )}
-        <div className="mt-6 flex justify-between gap-4">
-          <button
-            onClick={handleDownload}
-            className="bg-blue-600 text-white invisible py-1 px-2 rounded-lg flex items-center gap-5 hover:bg-blue-700 transition"
-          >
-            <FaDownload /> Download Data
-          </button>
-          {/* <button
-            onClick={() => navigate("/")}
-            className="bg-green-600 text-white py-1 px-2 rounded-lg flex items-center gap-2 hover:bg-green-700 transition"
-          >
-            <FaArrowLeft /> Back to QR Code Generator
-          </button> */}
+          )}
+
+          {activeSection === "address" && (
+            <div className="flex items-center gap-4">
+              <FaMapMarkerAlt className="text-white" size={20} />
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                  data.address
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:underline"
+              >
+                Address: {data.address || "N/A"}
+              </a>
+            </div>
+          )}
+
+          {activeSection === "social" && (
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-4">
+                <FaGlobe className="text-white" size={20} />
+                <a
+                  href={data.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:underline"
+                >
+                  Website: {data.website || "N/A"}
+                </a>
+              </div>
+              <div className="flex items-center gap-4">
+                <FaBuilding className="text-white" size={20} />
+                <span className="text-white">
+                  Company: {data.company || "N/A"}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
